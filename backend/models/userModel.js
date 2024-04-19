@@ -37,10 +37,14 @@ const userSchema = mongoose.Schema(
       maxLength: [250, "Bio must not be more than 250 characters"],
       default: "bio",
     },
+    //Additions
+  role:{
+    type: String
+  }
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 //   Encrypt password before saving to DB

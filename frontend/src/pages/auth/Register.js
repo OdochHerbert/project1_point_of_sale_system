@@ -14,6 +14,7 @@ const initialState = {
   email: "",
   password: "",
   password2: "",
+  role: "", // Add a role field to store the selected role
 };
 
 const Register = () => {
@@ -21,7 +22,7 @@ const Register = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setformData] = useState(initialState);
-  const { name, email, password, password2 } = formData;
+  const { name, email, password, password2, role } = formData;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -31,7 +32,7 @@ const Register = () => {
   const register = async (e) => {
     e.preventDefault();
 
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !role) {
       return toast.error("All fields are required");
     }
     if (password.length < 6) {
@@ -48,6 +49,7 @@ const Register = () => {
       name,
       email,
       password,
+      role, // Include the role field in the userData object
     };
     setIsLoading(true);
     try {
@@ -105,6 +107,17 @@ const Register = () => {
               value={password2}
               onChange={handleInputChange}
             />
+            <select
+              name="role"
+              value={role}
+              onChange={handleInputChange}
+              className={styles.input} // Apply the same style as input fields
+            >
+              <option value="">Select a Role</option>
+              <option value="SuperAdmin">SuperAdmin</option>
+              <option value="Manager">Manager</option>
+              {/* Add more options as needed */}
+            </select>
             <button type="submit" className="--btn --btn-primary --btn-block">
               Register
             </button>

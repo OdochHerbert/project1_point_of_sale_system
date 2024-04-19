@@ -13,10 +13,10 @@ const generateToken = (id) => {
 
 // Register User
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, role } = req.body;
 
   // Validation
-  if (!name || !email || !password) {
+  if (!name || !email || !password || !role) {
     res.status(400);
     throw new Error("Please fill in all required fields");
   }
@@ -38,9 +38,10 @@ const registerUser = asyncHandler(async (req, res) => {
     name,
     email,
     password,
+    role, // Include the role field
   });
 
-  //   Generate Token
+  // Generate Token
   const token = generateToken(user._id);
 
   // Send HTTP-only cookie
