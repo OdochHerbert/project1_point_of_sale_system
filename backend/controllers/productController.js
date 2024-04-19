@@ -71,7 +71,7 @@ const getProduct = asyncHandler(async (req, res) => {
     throw new Error("Product not found");
   }
   // Match product to its user
-  if (product.user.toString() !== req.user.id) {
+  if (product.user._id.toString() !== req.user.id) {
     res.status(401);
     throw new Error("User not authorized");
   }
@@ -97,7 +97,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 
 // Update Product
 const updateProduct = asyncHandler(async (req, res) => {
-  const { name, category, quantity, price, description } = req.body;
+  const { name, category, quantity, price, description, approved } = req.body;
   const { id } = req.params;
 
   const product = await Product.findById(id);
@@ -108,7 +108,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     throw new Error("Product not found");
   }
   // Match product to its user
-  if (product.user.toString() !== req.user.id) {
+  if (product.user.role.toString() !== 'SuperAdmin') {
     res.status(401);
     throw new Error("User not authorized");
   }
@@ -145,6 +145,8 @@ const updateProduct = asyncHandler(async (req, res) => {
       quantity,
       price,
       description,
+      adminApproved: req.user.id,
+      approved, // Include approved field in the update
       image: Object.keys(fileData).length === 0 ? product?.image : fileData,
     },
     {

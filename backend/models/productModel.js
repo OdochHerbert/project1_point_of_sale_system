@@ -57,8 +57,10 @@ const productSchema = mongoose.Schema(
 );
 // Always populate the author field
 productSchema
-.pre('findOne', Populate('name'))
-.pre('find', Populate('name'));
+.pre('findOne', Populate('user'))
+.pre('find', Populate('user'))
+.pre('findOne', Populate('adminApproved'))
+.pre('find', Populate('adminApproved'));
 
 
 const Product = mongoose.model("Product", productSchema);

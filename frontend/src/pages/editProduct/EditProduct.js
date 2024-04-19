@@ -41,8 +41,9 @@ const EditProduct = () => {
   }, [productEdit]);
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setProduct({ ...product, [name]: value });
+    const { name, value, type, checked } = e.target;
+    const inputValue = type === "checkbox" ? checked : value;
+    setProduct({ ...product, [name]: inputValue });
   };
 
   const handleImageChange = (e) => {
@@ -54,11 +55,12 @@ const EditProduct = () => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("name", product?.name);
-
     formData.append("category", product?.category);
     formData.append("quantity", product?.quantity);
     formData.append("price", product?.price);
     formData.append("description", description);
+    formData.append("approved", true); // Set approved to true
+
     if (productImage) {
       formData.append("image", productImage);
     }
