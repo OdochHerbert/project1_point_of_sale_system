@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../../components/loader/Loader";
-import ProductForm from "../../components/product/productForm/ProductForm";
+import EditForm from "../../components/product/productForm/EditForm";
 import {
   getProduct,
   getProducts,
@@ -76,7 +76,7 @@ const EditProduct = () => {
     <div>
       {isLoading && <Loader />}
       <h3 className="--mt">Edit Product</h3>
-      <ProductForm
+      <EditForm
         product={product}
         productImage={productImage}
         imagePreview={imagePreview}

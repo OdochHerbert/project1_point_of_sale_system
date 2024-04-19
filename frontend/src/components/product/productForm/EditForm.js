@@ -5,7 +5,7 @@ import Card from "../../card/Card";
 
 import "./ProductForm.scss";
 
-const ProductForm = ({
+const EditForm = ({
   product,
   productImage,
   imagePreview,
@@ -79,19 +79,19 @@ const ProductForm = ({
             theme="snow"
             value={description}
             onChange={setDescription}
-            modules={ProductForm.modules}
-            formats={ProductForm.formats}
+            modules={EditForm.modules}
+            formats={EditForm.formats}
           />
 
           {/* Add input field for approved */}
-          {/*<label>Approve-<strong>Only Admin</strong>:</label>
+          <label>Approve-<strong>Only Admin</strong>:</label>
           <input
             type="checkbox"
             name="approved"
             checked={product?.approved}
             onChange={handleInputChange}
           />
-*/}
+
           <div className="--my">
             <button type="submit" className="--btn --btn-primary">
               Save Product
@@ -103,7 +103,7 @@ const ProductForm = ({
   );
 };
 
-ProductForm.modules = {
+EditForm.modules = {
   toolbar: [
     [{ header: "1" }, { header: "2" }, { font: [] }],
     [{ size: [] }],
@@ -119,7 +119,7 @@ ProductForm.modules = {
     ["clean"],
   ],
 };
-ProductForm.formats = [
+EditForm.formats = [
   "header",
   "font",
   "size",
@@ -140,4 +140,4 @@ ProductForm.formats = [
   "align",
 ];
 
-export default ProductForm;
+export default EditForm;
