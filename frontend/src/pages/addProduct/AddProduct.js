@@ -7,12 +7,16 @@ import {
   createProduct,
   selectIsLoading,
 } from "../../redux/features/product/productSlice";
+ 
+
 
 const initialState = {
   name: "",
   category: "",
   quantity: "",
   price: "",
+  approved: false,
+// Set adminApproved as an object with id and name fields
 };
 
 const AddProduct = () => {
@@ -25,11 +29,19 @@ const AddProduct = () => {
 
   const isLoading = useSelector(selectIsLoading);
 
-  const { name, category, price, quantity } = product;
+  const { name, category, price, quantity, approved, adminApproved } = product;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setProduct({ ...product, [name]: value });
+    if (name === "adminApprovedId") {
+      // If changing adminApproved id, update the id and name fields of adminApproved object
+      setProduct({
+        ...product,
+        adminApproved: { ...adminApproved, id: value, name: "adminName" }, // Here "adminName" is just a placeholder, you should replace it with the actual name value.
+      });
+    } else {
+      setProduct({ ...product, [name]: value });
+    }
   };
 
   const handleImageChange = (e) => {
@@ -54,6 +66,8 @@ const AddProduct = () => {
     formData.append("price", price);
     formData.append("description", description);
     formData.append("image", productImage);
+    formData.append("approved", approved);
+    formData.append("adminApproved", JSON.stringify(adminApproved)); // Convert adminApproved object to JSON string
 
     console.log(...formData);
 

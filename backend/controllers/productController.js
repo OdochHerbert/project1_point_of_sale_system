@@ -2,12 +2,15 @@ const asyncHandler = require("express-async-handler");
 const Product = require("../models/productModel");
 const { fileSizeFormatter } = require("../utils/fileUpload");
 const cloudinary = require("cloudinary").v2;
+const { ObjectId } = require('mongodb')
+// Generate a new ObjectID
+const objectId1 = new ObjectId();
 
-// Create Prouct
+// Create Product
 const createProduct = asyncHandler(async (req, res) => {
-  const { name, sku, category, quantity, price, description } = req.body;
+  const { name, sku, category, quantity, price, description, approved, adminApproved } = req.body; // Include approved and adminApproved fields
 
-  //   Validation
+  // Validation
   if (!name || !category || !quantity || !price || !description) {
     res.status(400);
     throw new Error("Please fill in all fields");
@@ -46,6 +49,8 @@ const createProduct = asyncHandler(async (req, res) => {
     price,
     description,
     image: fileData,
+    approved, // Include approved field
+    adminApproved: objectId1, // Include adminApproved field
   });
 
   res.status(201).json(product);

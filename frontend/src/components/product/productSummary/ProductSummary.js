@@ -37,14 +37,24 @@ const ProductSummary = ({ products }) => {
     dispatch(CALC_CATEGORY(products));
   }, [dispatch, products]);
 
+  // Filter approved and unapproved products
+  const approvedProductsCount = products.filter(product => product.approved).length;
+  const unapprovedProductsCount = products.filter(product => !product.approved).length;
+
   return (
     <div className="product-summary">
       <h3 className="--mt">Inventory Stats</h3>
       <div className="info-summary">
         <InfoBox
           icon={productIcon}
-          title={"Total Products"}
-          count={products.length}
+          title={"Approved Products"}
+          count={approvedProductsCount}
+          bgColor="card1"
+        />
+        <InfoBox
+          icon={productIcon}
+          title={"Unapproved Products"}
+          count={unapprovedProductsCount}
           bgColor="card1"
         />
         <InfoBox

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Populate = require('../util/autopopulate');
 
 const productSchema = mongoose.Schema(
   {
@@ -38,6 +39,13 @@ const productSchema = mongoose.Schema(
       required: [true, "Please add a description"],
       trim: true,
     },
+    store: {
+      type: String,
+    },
+    approved: {
+      type: Boolean,
+    },
+    adminApproved: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     image: {
       type: Object,
       default: {},
@@ -47,6 +55,11 @@ const productSchema = mongoose.Schema(
     timestamps: true,
   }
 );
+// Always populate the author field
+productSchema
+.pre('findOne', Populate('name'))
+.pre('find', Populate('name'));
+
 
 const Product = mongoose.model("Product", productSchema);
 module.exports = Product;
