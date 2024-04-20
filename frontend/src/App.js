@@ -20,11 +20,20 @@ import EditProduct from "./pages/editProduct/EditProduct";
 import Profile from "./pages/profile/Profile";
 import EditProfile from "./pages/profile/EditProfile";
 import Contact from "./pages/contact/Contact";
+//Additions
+import ProductList from "./components/product/productList/ProductList";
+import { useSelector } from "react-redux";
+import { getProducts } from "./redux/features/product/productSlice";
+import { selectIsLoggedIn } from "./redux/features/auth/authSlice";
 
 axios.defaults.withCredentials = true;
 
 function App() {
   const dispatch = useDispatch();
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const { products, isLoading, isError, message } = useSelector(
+    (state) => state.product
+  );
 
   useEffect(() => {
     async function loginStatus() {
@@ -32,7 +41,21 @@ function App() {
       dispatch(SET_LOGIN(status));
     }
     loginStatus();
-  }, [dispatch]);
+    if (isLoggedIn === true) {
+      dispatch(getProducts());
+    }
+
+    if (isError) {
+      console.log(message);
+    }
+  }, [isLoggedIn, isError, message,dispatch]);
+ 
+  // Filter products based on approval status
+  const approvedProducts = products.filter((product) => product.approved===true);
+  const unapprovedProducts = products.filter((product) => product.approved===false);
+  console.log(unapprovedProducts)
+
+
 
   return (
     <BrowserRouter>
@@ -110,6 +133,26 @@ function App() {
             <Sidebar>
               <Layout>
                 <Contact />
+              </Layout>
+            </Sidebar>
+          }
+        />
+        <Route
+          path="/approved"
+          element={
+            <Sidebar>
+              <Layout>
+                <ProductList  products={products} products1={true} isLoading={isLoading}/>
+              </Layout>
+            </Sidebar>
+          }
+        />
+        <Route
+          path="/approved0"
+          element={
+            <Sidebar>
+              <Layout>
+                <ProductList  products={products} products1={false} isLoading={isLoading}/>
               </Layout>
             </Sidebar>
           }
