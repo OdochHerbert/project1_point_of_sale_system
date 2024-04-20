@@ -3,6 +3,7 @@ const Product = require("../models/productModel");
 const { fileSizeFormatter } = require("../utils/fileUpload");
 const cloudinary = require("cloudinary").v2;
 const { ObjectId } = require('mongodb')
+const User = require("../models/userModel")
 // Generate a new ObjectID
 const objectId1 = new ObjectId();
 
@@ -58,12 +59,22 @@ const createProduct = asyncHandler(async (req, res) => {
 
 // Get all Products
 const getProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({ user: req.user.id }).sort("-createdAt");
+  let products
+  const users = await User.find({_id:req.user.id})
+  if(users[0].role == 'SuperAdmin'){
+    products = await Product.find({}).sort("-createdAt");
+
+  }
+  else{
+    products = await Product.find({ user: req.user.id }).sort("-createdAt");
+  }
+  
   res.status(200).json(products);
 });
 
 // Get single product
 const getProduct = asyncHandler(async (req, res) => {
+  const users = await User.find({_id:req.user.id})
   const product = await Product.findById(req.params.id);
   // if product doesnt exist
   if (!product) {
@@ -71,9 +82,10 @@ const getProduct = asyncHandler(async (req, res) => {
     throw new Error("Product not found");
   }
   // Match product to its user
-  if (product.user._id.toString() !== req.user.id) {
+  console.log(users[0].role)
+  if (users[0].role !== 'SuperAdmin') {
     res.status(401);
-    throw new Error("User not authorized");
+    throw new Error(users[0].role);
   }
   res.status(200).json(product);
 });
@@ -99,7 +111,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 const updateProduct = asyncHandler(async (req, res) => {
   const { name, category, quantity, price, description, approved } = req.body;
   const { id } = req.params;
-
+  const users = await User.find({_id:req.user.id})
   const product = await Product.findById(id);
 
   // if product doesnt exist
@@ -108,7 +120,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     throw new Error("Product not found");
   }
   // Match product to its user
-  if (product.user.role.toString() !== 'SuperAdmin') {
+  if (users[0].role !== 'SuperAdmin') {
     res.status(401);
     throw new Error("User not authorized");
   }

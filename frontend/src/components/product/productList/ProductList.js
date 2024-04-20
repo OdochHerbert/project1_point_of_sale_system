@@ -18,7 +18,7 @@ import {
 } from "../../../redux/features/product/productSlice";
 import { Link } from "react-router-dom";
 
-const ProductList = ({ products, isLoading }) => {
+const ProductList = ({ products, products1, isLoading }) => {
   const [search, setSearch] = useState("");
   const [itemOffset, setItemOffset] = useState(0);
   const filteredProducts = useSelector(selectFilteredPoducts);
@@ -91,7 +91,7 @@ const ProductList = ({ products, isLoading }) => {
       {isLoading && <SpinnerImg />}
 
       <div className="table">
-        <h3>Unapproved Products</h3>
+        <h3>{products1 ? "Approved Products" : "Unapproved Products"}</h3>
         <table>
           {/* Table Header */}
           <thead>
@@ -108,75 +108,7 @@ const ProductList = ({ products, isLoading }) => {
           {/* Table Body */}
           <tbody>
             {currentItems
-              .filter((product) => !product.approved)
-              .map((product, index) => (
-                <tr key={product._id}>
-                  <td>{index + 1}</td>
-                  <td>{shortenText(product.name, 16)}</td>
-                  <td>{product.category}</td>
-                  <td>{"$" + product.price}</td>
-                  <td>{product.quantity}</td>
-                  <td>{"$" + product.price * product.quantity}</td>
-                  <td className="icons">
-                    <span>
-                      <Link to={`/product-detail/${product._id}`}>
-                        <AiOutlineEye size={25} color={"purple"} />
-                      </Link>
-                    </span>
-                    <span>
-                      <Link to={`/edit-product/${product._id}`}>
-                        <FaEdit size={20} color={"green"} />
-                      </Link>
-                    </span>
-                    <span>
-                      <FaTrashAlt
-                        size={20}
-                        color={"red"}
-                        onClick={() => confirmDelete(product._id)}
-                      />
-                    </span>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-        {/* Pagination */}
-        <ReactPaginate
-          breakLabel="..."
-          nextLabel="Next"
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={3}
-          pageCount={pageCount}
-          previousLabel="Prev"
-          renderOnZeroPageCount={null}
-          containerClassName="pagination"
-          pageLinkClassName="page-num"
-          previousLinkClassName="page-num"
-          nextLinkClassName="page-num"
-          activeLinkClassName="activePage"
-        />
-        {/* End Pagination */}
-      </div>
-
-      <div className="table">
-        <h3>Approved Products</h3>
-        <table>
-          {/* Table Header */}
-          <thead>
-            <tr>
-              <th>s/n</th>
-              <th>Name</th>
-              <th>Category</th>
-              <th>Price</th>
-              <th>Quantity</th>
-              <th>Value</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          {/* Table Body */}
-          <tbody>
-            {currentItems
-              .filter((product) => product.approved)
+              .filter((product) => (products1 ? product.approved : !product.approved))
               .map((product, index) => (
                 <tr key={product._id}>
                   <td>{index + 1}</td>

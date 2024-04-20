@@ -24,11 +24,17 @@ const Dashboard = () => {
       console.log(message);
     }
   }, [isLoggedIn, isError, message, dispatch]);
+   // Filter products based on approval status
+   const approvedProducts = products.filter((product) => product.approved===true);
+   const unapprovedProducts = products.filter((product) => product.approved===false);
+   console.log(unapprovedProducts)
 
   return (
     <div>
       <ProductSummary products={products} />
-      <ProductList products={products} isLoading={isLoading} />
+      <ProductList products={products} products1={true} isLoading={isLoading} />
+      <ProductList products={products} products1={false} isLoading={isLoading}/>
+      
     </div>
   );
 };
