@@ -27,14 +27,17 @@ const Dashboard = () => {
    // Filter products based on approval status
    const approvedProducts = products.filter((product) => product.approved===true);
    const unapprovedProducts = products.filter((product) => product.approved===false);
-   console.log(unapprovedProducts)
+
+   //Removed from return
+    /*<ProductList products={products} products1={true} isLoading={isLoading} />
+      <ProductList products={products} products1={false} isLoading={isLoading}/>
+    */
+    
+  
 
   return (
     <div>
-      <ProductSummary products={products} />
-      <ProductList products={products} products1={true} isLoading={isLoading} />
-      <ProductList products={products} products1={false} isLoading={isLoading}/>
-      
+      <ProductSummary products={products} />    
     </div>
   );
 };

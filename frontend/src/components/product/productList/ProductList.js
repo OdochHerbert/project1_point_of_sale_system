@@ -98,7 +98,7 @@ const ProductList = ({ products, products1, isLoading }) => {
             <tr>
               <th>s/n</th>
               <th>Name</th>
-              <th>Category</th>
+              <th>Created By</th>
               <th>Price</th>
               <th>Quantity</th>
               <th>Value</th>
@@ -113,7 +113,7 @@ const ProductList = ({ products, products1, isLoading }) => {
                 <tr key={product._id}>
                   <td>{index + 1}</td>
                   <td>{shortenText(product.name, 16)}</td>
-                  <td>{product.category}</td>
+                  <td>{product.user.name}</td>
                   <td>{"$" + product.price}</td>
                   <td>{product.quantity}</td>
                   <td>{"$" + product.price * product.quantity}</td>

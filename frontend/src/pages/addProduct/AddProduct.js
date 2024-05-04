@@ -26,10 +26,11 @@ const AddProduct = () => {
   const [productImage, setProductImage] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
   const [description, setDescription] = useState("");
+  const [selectedProductValue, setSelectedProductValue] = useState(null);
 
   const isLoading = useSelector(selectIsLoading);
 
-  const { name, category, price, quantity, approved, adminApproved } = product;
+  const { name, carton,dozen, price, quantity, approved, adminApproved } = product;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -59,17 +60,19 @@ const AddProduct = () => {
   const saveProduct = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("name", name);
-    formData.append("sku", generateKSKU(category));
-    formData.append("category", category);
-    formData.append("quantity", Number(quantity));
+    formData.append("name", selectedProductValue);
+    formData.append("sku", generateKSKU(selectedProductValue));//previuosly on category
     formData.append("price", price);
+    formData.append("quantity", Number(quantity));
+    formData.append("dozen", dozen);
+    formData.append("carton", carton);
     formData.append("description", description);
     formData.append("image", productImage);
     formData.append("approved", approved);
     formData.append("adminApproved", JSON.stringify(adminApproved)); // Convert adminApproved object to JSON string
 
     console.log(...formData);
+    console.log('selected',selectedProductValue)
 
     await dispatch(createProduct(formData));
 
@@ -81,6 +84,8 @@ const AddProduct = () => {
       {isLoading && <Loader />}
       <h3 className="--mt">Add New Product</h3>
       <ProductForm
+        //saveProduct={handleSaveProduct} 
+        setSelectedProductValue={setSelectedProductValue}
         product={product}
         productImage={productImage}
         imagePreview={imagePreview}

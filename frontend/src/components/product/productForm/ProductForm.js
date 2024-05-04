@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Card from "../../card/Card";
-
+import Select from "react-select";
 import "./ProductForm.scss";
 
 const ProductForm = ({
@@ -14,7 +14,30 @@ const ProductForm = ({
   handleInputChange,
   handleImageChange,
   saveProduct,
+  // Add a prop to capture the selected product value
+  setSelectedProductValue,
 }) => {
+  // Define state variable for selected product
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  // Define product options
+  const productOptions = [
+    { label: "Product One", value: "One" },
+    { label: "Product Two", value: "Two" },
+    { label: "Product Three", value: "Three" },
+    { label: "Product Four", value: "Four" },
+    { label: "Product Five", value: "Five" },
+    // Add more options as needed
+  ];
+
+  // Handle change in selected product
+  const handleProductChange = (selectedOption) => {
+    setSelectedProduct(selectedOption);
+    // Call the function to set the selected product value in the parent component
+    setSelectedProductValue(selectedOption.value);
+  };
+
+  console.log(selectedProduct)
   return (
     <div className="add-product">
       <Card cardClass={"card"}>
@@ -39,41 +62,50 @@ const ProductForm = ({
             )}
           </Card>
           <label>Product Name:</label>
-          <input
-            type="text"
-            placeholder="Product name"
+          <Select
             name="name"
-            value={product?.name}
-            onChange={handleInputChange}
+            value={selectedProduct} // Change this line to use selectedProduct state
+            onChange={handleProductChange}
+            options={productOptions}
+            placeholder="Select Product Name"
+            isSearchable
+            autoFocus
           />
 
-          <label>Product Category:</label>
+          <label>Product Price per PC:</label>
           <input
-            type="text"
-            placeholder="Product Category"
-            name="category"
-            value={product?.category}
-            onChange={handleInputChange}
-          />
-
-          <label>Product Price:</label>
-          <input
-            type="text"
+            type="number"
             placeholder="Product Price"
             name="price"
             value={product?.price}
             onChange={handleInputChange}
           />
 
-          <label>Product Quantity:</label>
+          <label>Product Quantity in PCS:</label>
           <input
-            type="text"
+            type="number"
             placeholder="Product Quantity"
             name="quantity"
             value={product?.quantity}
             onChange={handleInputChange}
           />
-
+          <label>PCS per dozen:</label>
+          <input
+            type="number"
+            placeholder="Product Quantity"
+            name="dozen"
+            value={product?.dozen}
+            onChange={handleInputChange}
+          />
+          <label>PCS per carton:</label>
+          <input
+            type="number"
+            placeholder="Product Quantity"
+            name="carton"
+            value={product?.carton}
+            onChange={handleInputChange}
+          />
+          
           <label>Product Description:</label>
           <ReactQuill
             theme="snow"
@@ -82,16 +114,7 @@ const ProductForm = ({
             modules={ProductForm.modules}
             formats={ProductForm.formats}
           />
-
-          {/* Add input field for approved */}
-          {/*<label>Approve-<strong>Only Admin</strong>:</label>
-          <input
-            type="checkbox"
-            name="approved"
-            checked={product?.approved}
-            onChange={handleInputChange}
-          />
-*/}
+          
           <div className="--my">
             <button type="submit" className="--btn --btn-primary">
               Save Product

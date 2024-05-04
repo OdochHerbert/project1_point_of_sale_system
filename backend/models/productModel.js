@@ -19,18 +19,23 @@ const productSchema = mongoose.Schema(
       default: "SKU",
       trim: true,
     },
-    category: {
-      type: String,
+    carton: {
+      type: Number,
       required: [true, "Please add a category"],
       trim: true,
     },
     quantity: {
-      type: String,
+      type: Number,
       required: [true, "Please add a quantity"],
       trim: true,
     },
     price: {
-      type: String,
+      type: Number,
+      required: [true, "Please add a price"],
+      trim: true,
+    },
+    dozen: {
+      type: Number,
       required: [true, "Please add a price"],
       trim: true,
     },

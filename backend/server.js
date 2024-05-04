@@ -9,6 +9,10 @@ const contactRoute = require("./routes/contactRoute");
 const errorHandler = require("./middleWare/errorMiddleware");
 const cookieParser = require("cookie-parser");
 const path = require("path");
+const crypto = require("crypto");
+const JWT_SECRET = crypto.randomBytes(32).toString("hex");
+console.log(JWT_SECRET)
+
 
 const app = express();
 

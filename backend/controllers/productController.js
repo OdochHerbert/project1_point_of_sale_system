@@ -9,10 +9,10 @@ const objectId1 = new ObjectId();
 
 // Create Product
 const createProduct = asyncHandler(async (req, res) => {
-  const { name, sku, category, quantity, price, description, approved, adminApproved } = req.body; // Include approved and adminApproved fields
+  const { name, sku, carton, dozen, quantity, price, description, approved, adminApproved } = req.body; // Include approved and adminApproved fields
 
   // Validation
-  if (!name || !category || !quantity || !price || !description) {
+  if (!name || !carton || !quantity || !price || !description) {
     res.status(400);
     throw new Error("Please fill in all fields");
   }
@@ -45,8 +45,9 @@ const createProduct = asyncHandler(async (req, res) => {
     user: req.user.id,
     name,
     sku,
-    category,
+    carton,
     quantity,
+    dozen,
     price,
     description,
     image: fileData,
