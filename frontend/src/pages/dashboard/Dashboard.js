@@ -5,6 +5,7 @@ import ProductSummary from "../../components/product/productSummary/ProductSumma
 import useRedirectLoggedOutUser from "../../customHook/useRedirectLoggedOutUser";
 import { selectIsLoggedIn } from "../../redux/features/auth/authSlice";
 import { getProducts } from "../../redux/features/product/productSlice";
+import ProductList2 from "../../components/product/productSummary/productList2";
 
 const Dashboard = () => {
   useRedirectLoggedOutUser("/login");
@@ -37,7 +38,36 @@ const Dashboard = () => {
 
   return (
     <div>
-      <ProductSummary products={products} />    
+      <ProductSummary products={products} />   
+      <ProductList2>
+          {({ products, loading, error }) => (
+            <div>
+              {loading ? (
+                <div>Loading...</div>
+              ) : error ? (
+                <div>Error: {error}</div>
+              ) : (
+                <div>
+                  <h1>Product List</h1>
+                  <ul>
+                    {products.map(product => (
+                      <li key={product._id}>
+                        <h2>{product.name}</h2>
+                        <p>SKU: {product.sku}</p>
+                        <p>Carton: {product.carton}</p>
+                        <p>Quantity: {product.quantity}</p>
+                        <p>Price: ${product.price}</p>
+                        <p>Dozen: {product.dozen}</p>
+                        <p>Description: {product.description}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+        </ProductList2>
+
     </div>
   );
 };

@@ -43,6 +43,8 @@ const EditProduct = () => {
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     const inputValue = type === "checkbox" ? checked : value;
+    
+    // Update the state accordingly
     setProduct({ ...product, [name]: inputValue });
   };
 
@@ -59,13 +61,11 @@ const EditProduct = () => {
     formData.append("quantity", product?.quantity);
     formData.append("price", product?.price);
     formData.append("description", description);
-    formData.append("approved", true); // Set approved to true
+    formData.append("approved", product?.approved); // Append the approved value
 
     if (productImage) {
       formData.append("image", productImage);
     }
-
-    console.log(...formData);
 
     await dispatch(updateProduct({ id, formData }));
     await dispatch(getProducts());

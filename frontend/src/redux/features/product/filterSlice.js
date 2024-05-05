@@ -14,8 +14,7 @@ const filterSlice = createSlice({
       console.log(products)
       const tempProducts = products.filter(
         (product) =>
-          product.name.toLowerCase().includes(search.toLowerCase())
-          // || product.category.toLowerCase().includes(search.toLowerCase())
+          product.name.toLowerCase().includes(search.toLowerCase())|| product.user.name.toLowerCase().includes(search.toLowerCase())
       );
 
       state.filteredProducts = tempProducts;

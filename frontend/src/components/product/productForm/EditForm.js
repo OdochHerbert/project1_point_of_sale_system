@@ -2,6 +2,7 @@ import React from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Card from "../../card/Card";
+import Select from "react-select";
 
 import "./ProductForm.scss";
 
@@ -47,30 +48,39 @@ const EditForm = ({
             onChange={handleInputChange}
           />
 
-          <label>Product Category:</label>
+          <label>Product Price per PC:</label>
           <input
-            type="text"
-            placeholder="Product Category"
-            name="category"
-            value={product?.category}
-            onChange={handleInputChange}
-          />
-
-          <label>Product Price:</label>
-          <input
-            type="text"
+            type="number"
             placeholder="Product Price"
             name="price"
             value={product?.price}
             onChange={handleInputChange}
           />
 
-          <label>Product Quantity:</label>
+          <label>Product Quantity in PCS:</label>
           <input
-            type="text"
+            type="number"
             placeholder="Product Quantity"
             name="quantity"
             value={product?.quantity}
+            onChange={handleInputChange}
+          />
+
+          <label>PCS per dozen:</label>
+          <input
+            type="number"
+            placeholder="PCS per dozen"
+            name="dozen"
+            value={product?.dozen}
+            onChange={handleInputChange}
+          />
+
+          <label>PCS per carton:</label>
+          <input
+            type="number"
+            placeholder="PCS per carton"
+            name="carton"
+            value={product?.carton}
             onChange={handleInputChange}
           />
 
@@ -79,11 +89,8 @@ const EditForm = ({
             theme="snow"
             value={description}
             onChange={setDescription}
-            modules={EditForm.modules}
-            formats={EditForm.formats}
           />
 
-          {/* Add input field for approved */}
           <label>Approve-<strong>Only Admin</strong>:</label>
           <input
             type="checkbox"
@@ -102,42 +109,5 @@ const EditForm = ({
     </div>
   );
 };
-
-EditForm.modules = {
-  toolbar: [
-    [{ header: "1" }, { header: "2" }, { font: [] }],
-    [{ size: [] }],
-    ["bold", "italic", "underline", "strike", "blockquote"],
-    [{ align: [] }],
-    [{ color: [] }, { background: [] }],
-    [
-      { list: "ordered" },
-      { list: "bullet" },
-      { indent: "-1" },
-      { indent: "+1" },
-    ],
-    ["clean"],
-  ],
-};
-EditForm.formats = [
-  "header",
-  "font",
-  "size",
-  "bold",
-  "italic",
-  "underline",
-  "strike",
-  "blockquote",
-  "color",
-  "background",
-  "list",
-  "bullet",
-  "indent",
-  "link",
-  "video",
-  "image",
-  "code-block",
-  "align",
-];
 
 export default EditForm;

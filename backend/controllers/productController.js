@@ -45,9 +45,9 @@ const createProduct = asyncHandler(async (req, res) => {
     user: req.user.id,
     name,
     sku,
-    carton,
+    carton : quantity/carton,
     quantity,
-    dozen,
+    dozen : quantity/dozen,
     price,
     description,
     image: fileData,
@@ -86,7 +86,7 @@ const getProduct = asyncHandler(async (req, res) => {
   console.log(users[0].role)
   if (users[0].role !== 'SuperAdmin') {
     res.status(401);
-    throw new Error(users[0].role);
+    //throw new Error(users[0].role);
   }
   res.status(200).json(product);
 });
@@ -94,23 +94,41 @@ const getProduct = asyncHandler(async (req, res) => {
 // Delete Product
 const deleteProduct = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
-  // if product doesnt exist
-  if (!product) {
+  const users = await User.find({_id:req.user.id})
+  //console.log(users)
+  // if product doesn't exist
+ 
+  // Match product to its user
+  if ((product.user._id.toString() === req.user.id) || (users[0].role = 'SuperAdmin')) {
+    await Product.deleteOne({ _id: req.params.id });
+  res.status(200).json({ message: "Product deleted." });
+  console.log('Deleted By:') 
+  }
+  else  if (!product) {
     res.status(404);
     throw new Error("Product not found");
   }
-  // Match product to its user
-  if (product.user.toString() !== req.user.id) {
+  else{
     res.status(401);
     throw new Error("User not authorized");
   }
-  await product.remove();
-  res.status(200).json({ message: "Product deleted." });
+  
 });
+
 
 // Update Product
 const updateProduct = asyncHandler(async (req, res) => {
-  const { name, category, quantity, price, description, approved } = req.body;
+  const {
+    name,
+    sku,
+    carton,
+    quantity,
+    dozen,
+    price,
+    description,
+    image,
+    approved,
+    adminApproved} = req.body;
   const { id } = req.params;
   const users = await User.find({_id:req.user.id})
   const product = await Product.findById(id);
@@ -120,13 +138,9 @@ const updateProduct = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("Product not found");
   }
-  // Match product to its user
-  if (users[0].role !== 'SuperAdmin') {
-    res.status(401);
-    throw new Error("User not authorized");
-  }
-
-  // Handle Image upload
+  
+  if((users[0].role === 'SuperAdmin')|| (product.user._id.toString() === req.user.id)){
+     // Handle Image upload
   let fileData = {};
   if (req.file) {
     // Save image to cloudinary
@@ -149,15 +163,29 @@ const updateProduct = asyncHandler(async (req, res) => {
     };
   }
 
+  //Checking if approval tried
+  if(product.user._id.toString() === req.user.id){
+    console.log('old: ', product.approved)
+    console.log('new: ',approved)
+    if(product.approved !== approved){
+     console.log(product.user.name + 'tried changing approval status of product '+ product.name)
+     approved = product.approved
+     console.log('old: ', product.approved)
+     console.log('new: ',approved)
+    }
+
+     }
+
   // Update Product
   const updatedProduct = await Product.findByIdAndUpdate(
     { _id: id },
     {
       name,
-      category,
       quantity,
       price,
       description,
+      dozen,
+      carton,
       adminApproved: req.user.id,
       approved, // Include approved field in the update
       image: Object.keys(fileData).length === 0 ? product?.image : fileData,
@@ -169,6 +197,14 @@ const updateProduct = asyncHandler(async (req, res) => {
   );
 
   res.status(200).json(updatedProduct);
+  }
+  // Match product to its user
+  else {
+    res.status(401);
+    throw new Error("User not authorized");
+  }
+
+ 
 });
 
 module.exports = {

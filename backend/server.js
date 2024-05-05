@@ -11,6 +11,7 @@ const cookieParser = require("cookie-parser");
 const path = require("path");
 const crypto = require("crypto");
 const JWT_SECRET = crypto.randomBytes(32).toString("hex");
+const Product = require("./models/productModel");
 console.log(JWT_SECRET)
 
 
@@ -38,6 +39,15 @@ app.use("/api/contactus", contactRoute);
 // Routes
 app.get("/", (req, res) => {
   res.send("Home Page");
+});
+app.get('/api/products2', async (req, res) => {
+  try {
+    const products = await Product.find();
+    res.json(products);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
 });
 
 // Error Middleware
